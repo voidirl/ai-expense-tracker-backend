@@ -6,7 +6,7 @@ import com.example.expensetracker.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.time.LocalDate;
 @Service
 public class ExpenseService {
 
@@ -41,5 +41,12 @@ public class ExpenseService {
 
     public void deleteExpense(Long id) {
         expenseRepository.deleteById(id);
+    }
+    public List<Expense> getByCategory(String category) {
+        return expenseRepository.findByCategory(category);
+    }
+
+    public List<Expense> getByExpenseDate(LocalDate date) {
+        return expenseRepository.findByExpenseDate(date);
     }
 }

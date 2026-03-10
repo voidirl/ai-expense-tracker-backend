@@ -5,6 +5,7 @@ import com.example.expensetracker.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -42,5 +43,13 @@ public class ExpenseController {
     public ResponseEntity<String> deleteExpense(@PathVariable Long id){
         expenseService.deleteExpense(id);
         return ResponseEntity.ok("Deleted!");
+    }
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Expense>> getByCategory(@PathVariable String category){
+        return ResponseEntity.ok(expenseService.getByCategory(category));
+    }
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<Expense>> getByDate(@PathVariable LocalDate date){
+        return ResponseEntity.ok(expenseService.getByExpenseDate(date));
     }
 }
