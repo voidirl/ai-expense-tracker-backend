@@ -2,6 +2,7 @@ package com.example.expensetracker.controller;
 
 import com.example.expensetracker.model.Expense;
 import com.example.expensetracker.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ExpenseController {
     }
 
     @PostMapping                          // POST /api/expenses
-    public ResponseEntity<Expense> addExpense(@RequestBody Expense expense){
+    public ResponseEntity<Expense> addExpense(@Valid @RequestBody Expense expense){
         return ResponseEntity.ok(expenseService.addExpense(expense));
     }
 
@@ -35,7 +36,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}")                  // PUT /api/expenses/1
-    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense expense){
+    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @Valid @RequestBody Expense expense){
         return ResponseEntity.ok(expenseService.updateExpense(id, expense));
     }
 
