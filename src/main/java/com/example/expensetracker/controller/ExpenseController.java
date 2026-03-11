@@ -53,4 +53,9 @@ public class ExpenseController {
     public ResponseEntity<List<Expense>> getByDate(@PathVariable LocalDate date){
         return ResponseEntity.ok(expenseService.getByExpenseDate(date));
     }
+
+    @GetMapping("/total")
+    public ResponseEntity<Double> getTotalSum(){
+        return ResponseEntity.ok(expenseService.getTotalSum());
+    }
 }

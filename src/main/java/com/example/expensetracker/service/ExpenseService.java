@@ -49,4 +49,8 @@ public class ExpenseService {
     public List<Expense> getByExpenseDate(LocalDate date) {
         return expenseRepository.findByExpenseDate(date);
     }
+    public Double getTotalSum(){
+        Double total = expenseRepository.getTotalSum();
+        return total != null ? total : 0.0;
+    }
 }
