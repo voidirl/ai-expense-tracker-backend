@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(500,"Something went wrong"));
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> handleValidation(MethodArgumentNotValidException e){
         Map<String,String> errors = new HashMap<>();
         e.getBindingResult().getFieldErrors().forEach(error -> errors.put(

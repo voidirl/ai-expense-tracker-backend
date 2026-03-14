@@ -23,6 +23,7 @@ public class Expense{
     @NotBlank(message = "Category cannot be blank")
     private String category;
 
+    @NotNull(message = "Expense date cannot be null")
     private LocalDate expenseDate;
 
 }
