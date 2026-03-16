@@ -8,7 +8,7 @@ A full-stack expense tracking application with AI-powered insights.
 |--------|------|------|
 | Backend | Spring Boot, Java 21, MariaDB | [expense-tracker-backend](https://github.com/voidirl/ai-expense-tracker-backend) |
 | Frontend | React, Vite | [expense-tracker-frontend](https://github.com/voidirl/ai-expense-tracker-frontend) |
-| AI Service | Python/FastAPI | [expense-tracker-ai](https://github.com/voidirl/ai-expense-tracker-ai-service) |
+| AI Service | Python/FastAPI | [expense-tracker-ai](https://github.com/voidirl/expense-tracker-ai-service) |
 
 ## Architecture
 
