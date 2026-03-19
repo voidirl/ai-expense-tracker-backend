@@ -1,0 +1,25 @@
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MYSQL_ROOT_PASSWORD: 2122
+      MYSQL_DATABASE: expense_tracker
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/expense_tracker
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 2122
+    depends_on:
+      db:
+        condition: service_healthy
