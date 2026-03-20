@@ -2,7 +2,7 @@ services:
   db:
     image: mariadb:11
     environment:
-      MYSQL_ROOT_PASSWORD: 1903
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: expense_tracker
     ports:
       - "3307:3306"
@@ -19,7 +19,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/expense_tracker
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1903 
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
