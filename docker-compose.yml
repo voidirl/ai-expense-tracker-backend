@@ -31,3 +31,11 @@ services:
       - "3000:80"
     depends_on:
       - backend
+
+  ai-service:
+    build: ../expense-ai-service
+    ports:
+      - "8000:8000"
+    env_file: ../expense-ai-service/.env
+    depends_on:
+      - backend    
