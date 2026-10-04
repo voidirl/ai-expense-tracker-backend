@@ -1,13 +1,20 @@
 services:
   db:
-    image: mariadb:11
+    image: postgres:16
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: expense_tracker
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: expense_tracker
     ports:
-      - "3307:3306"
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USER:-postgres} -d expense_tracker",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -17,14 +24,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/expense_tracker
-      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/expense_tracker
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
 
-   
   frontend:
     build: ../expenseTracker-frontend
     ports:
@@ -35,7 +41,10 @@ services:
   ai-service:
     build: ../expense-ai-service
     ports:
-      - "8000:8000"
+      - "8001:8000"
     env_file: ../expense-ai-service/.env
     depends_on:
-      - backend    
+      - backend
+
+volumes:
+  postgres_data:

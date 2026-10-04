@@ -9,4 +9,8 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=builder /app/target/expensetracker-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Render and Railway route to $PORT. Spring Boot's relaxed binding does not map
+# PORT to server.port -- it only reads SERVER_PORT -- so the exec-form ENTRYPOINT
+# below would leave the app on 8080 while the platform expects a different port,
+# producing a 502. Shell form expands $PORT at runtime instead.
+ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=${PORT:-8080}"]
