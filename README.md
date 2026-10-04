@@ -83,11 +83,14 @@ docker-compose up --build
 | Frontend | 3000 | http://localhost:3000 |
 | Backend | 8080 | http://localhost:8080 |
 | AI Service | 8001 | http://localhost:8001 |
-| PostgreSQL | 5432 | localhost:5432 (mapped from container's 5432) |
+| PostgreSQL | 5433 | localhost:5433 (mapped from container's 5432) |
 
-The AI service publishes host port 8001 because 8000 is often already taken by a
-local dev server. The app never calls that port directly — nginx forwards
-`/ai-api/*` to the container's internal 8000, so nothing in the browser changes.
+The AI service publishes host port 8001 and PostgreSQL publishes 5433 because
+those host ports are commonly taken by a local dev server and a system
+PostgreSQL respectively. Both containers keep their standard internal ports, so
+nothing inside the network changes: the backend still reaches the database at
+`db:5432`, and nginx still proxies `/ai-api/*` to the AI service on port 8000.
+Only your host-side `psql` target changes.
 
 To stop:
 ```bash
