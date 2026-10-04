@@ -54,6 +54,24 @@ The frontend reads its own configuration from `expenseTracker-frontend/.env`
 same-origin paths that nginx forwards to the `backend` and `ai-service`
 containers, so no frontend configuration is needed for the Compose stack.
 
+### Running the backend outside Docker
+`src/main/resources/application.properties` reads the datasource from
+placeholders with **no defaults on purpose**: a container that is missing its
+configuration should fail immediately with an unresolved-placeholder error
+rather than silently connecting to localhost and hanging. Compose supplies all
+three, so `docker-compose up` needs nothing extra. To run the backend directly
+you must set them yourself:
+
+```bash
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/expense_tracker
+export SPRING_DATASOURCE_USERNAME=postgres
+export SPRING_DATASOURCE_PASSWORD=<same value as DB_PASSWORD>
+./mvnw spring-boot:run
+```
+
+`SHOW_SQL=true` turns on Hibernate's SQL logging, which is off by default so
+production logs stay quiet.
+
 ### Build & Run
 ```bash
 docker-compose up --build
@@ -64,8 +82,12 @@ docker-compose up --build
 |---|---|---|
 | Frontend | 3000 | http://localhost:3000 |
 | Backend | 8080 | http://localhost:8080 |
-| AI Service | 8000 | http://localhost:8000 |
+| AI Service | 8001 | http://localhost:8001 |
 | PostgreSQL | 5432 | localhost:5432 (mapped from container's 5432) |
+
+The AI service publishes host port 8001 because 8000 is often already taken by a
+local dev server. The app never calls that port directly — nginx forwards
+`/ai-api/*` to the container's internal 8000, so nothing in the browser changes.
 
 To stop:
 ```bash
